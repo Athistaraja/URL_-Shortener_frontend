@@ -18,7 +18,7 @@ const ShortenUrlForm = ({ onAddUrl, onUpdateUrl }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`http://localhost:5000/api/shorten`, {
+      const response = await axios.post(`https://url-shortener-backend-lyqr.onrender.com/api/shorten`, {
         originalUrl,
         customCode,
       });
@@ -36,7 +36,7 @@ const ShortenUrlForm = ({ onAddUrl, onUpdateUrl }) => {
   return (
     <div className="container mt-5">
       <form onSubmit={handleShortenSubmit} className="border p-4 rounded shadow-sm mb-4">
-        <h4 className='text-success text-center fw-bold'>Shorten a New URL</h4>
+        <h4 className='text-success text-center fst-italic'>Shorten a New URL</h4>
         <div className="mb-3">
           <label htmlFor="originalUrl" className="form-label">
             Original URL
