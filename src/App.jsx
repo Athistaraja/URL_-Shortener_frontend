@@ -12,7 +12,7 @@ const App = () => {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center mb-4">URL Shortener</h1>
+      <h1 className="text-danger text-center mb-4 fw-bold">URL Shortener</h1>
       <ShortenUrlForm onAddUrl={addShortenedUrl} />
       <UrlList urls={shortenedUrls} />
     </div>
