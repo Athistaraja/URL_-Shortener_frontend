@@ -2,15 +2,10 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #f8f9fa;
+  background: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
   font-family: 'Arial', sans-serif;
   display: flex;
   flex-direction: column;
-}
-
-.container {
-
-  max-width: 700px;
 }
 
 h1 {

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Clipboard, ClipboardCheck } from 'lucide-react';
+import { Clipboard, Loader2, CheckCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-const ShortenUrlForm = ({ onAddUrl, onUpdateUrl }) => {
+const ShortenUrlForm = ({ onAddUrl }) => {
   const [originalUrl, setOriginalUrl] = useState('');
   const [customCode, setCustomCode] = useState('');
-  const [existingCode, setExistingCode] = useState(''); 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
@@ -36,29 +36,30 @@ const ShortenUrlForm = ({ onAddUrl, onUpdateUrl }) => {
 
   const handlePaste = async () => {
     try {
-      const permissionStatus = await navigator.permissions.query({ name: 'clipboard-read' });
-      if (permissionStatus.state === 'granted' || permissionStatus.state === 'prompt') {
-        const text = await navigator.clipboard.readText();
-        setOriginalUrl(text);
-        setPasteNotification(true);
-        setTimeout(() => setPasteNotification(false), 3000);
-      } else {
-        setError('Clipboard access denied. Please allow clipboard permissions in your browser settings.');
-      }
+      const text = await navigator.clipboard.readText();
+      setOriginalUrl(text);
+      setPasteNotification(true);
+      setTimeout(() => setPasteNotification(false), 3000);
     } catch (err) {
-      console.error('Failed to read clipboard: ', err);
       setError('Failed to access clipboard. Please check your browser settings.');
     }
   };
 
   return (
-    <div className="container mt-5">
-      <form onSubmit={handleShortenSubmit} className="border p-4 rounded shadow-sm mb-4">
-        <h4 className='text-success text-center fst-italic'>Shorten a New URL</h4>
+    <motion.div 
+      className="container mt-5"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <form 
+        onSubmit={handleShortenSubmit} 
+        className="border p-4 rounded shadow-lg bg-white"
+      >
+        <h3 className='text-primary text-center mb-4 fw-bold'>Shorten Your URL</h3>
+
         <div className="mb-3">
-          <label htmlFor="originalUrl" className="form-label">
-            Original URL
-          </label>
+          <label htmlFor="originalUrl" className="form-label">Original URL</label>
           <div className="input-group">
             <input
               type="url"
@@ -79,18 +80,57 @@ const ShortenUrlForm = ({ onAddUrl, onUpdateUrl }) => {
           </div>
           {pasteNotification && <div className="alert alert-info mt-2">URL pasted from clipboard!</div>}
         </div>
-        {error && <div className="alert alert-danger">{error}</div>}
-        {success && <div className="alert alert-success">{success}</div>}
+
+        <div className="mb-3">
+          <label htmlFor="customCode" className="form-label">Custom Code (Optional)</label>
+          <input
+            type="text"
+            id="customCode"
+            className="form-control"
+            value={customCode}
+            onChange={(e) => setCustomCode(e.target.value)}
+            placeholder="Enter a custom short code"
+          />
+        </div>
+
+        {error && (
+          <motion.div 
+            className="alert alert-danger" 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            {error}
+          </motion.div>
+        )}
+
+        {success && (
+          <motion.div 
+            className="alert alert-success d-flex align-items-center" 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <CheckCircle className="me-2" size={20} /> {success}
+          </motion.div>
+        )}
+
         <button
           type="submit"
-          className="btn btn-primary w-100"
+          className="btn btn-primary w-100 d-flex justify-content-center align-items-center"
           disabled={loading}
         >
-          {loading ? 'Processing...' : 'Shorten URL'}
+          {loading ? (
+            <>
+              <Loader2 size={20} className="me-2 spinner-border" /> Processing...
+            </>
+          ) : (
+            'Shorten URL'
+          )}
         </button>
       </form>
-    </div>
+    </motion.div>
   );
 };
 
 export default ShortenUrlForm;
+
+
