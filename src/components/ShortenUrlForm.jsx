@@ -81,18 +81,6 @@ const ShortenUrlForm = ({ onAddUrl }) => {
           {pasteNotification && <div className="alert alert-info mt-2">URL pasted from clipboard!</div>}
         </div>
 
-        <div className="mb-3">
-          <label htmlFor="customCode" className="form-label">Custom Code (Optional)</label>
-          <input
-            type="text"
-            id="customCode"
-            className="form-control"
-            value={customCode}
-            onChange={(e) => setCustomCode(e.target.value)}
-            placeholder="Enter a custom short code"
-          />
-        </div>
-
         {error && (
           <motion.div 
             className="alert alert-danger" 
